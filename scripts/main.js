@@ -2,6 +2,7 @@ const form = document.querySelector('.input-form');
 
 form.addEventListener('submit', handleSubmit);
 
+
 async function handleSubmit(event) {
     event.preventDefault();
 
@@ -11,6 +12,7 @@ async function handleSubmit(event) {
 
     try {
     const result = await searchWikipedia(searchQuery);
+    console.log(result);
     printResults(result);
     } catch(err) {
         console.log(err);
