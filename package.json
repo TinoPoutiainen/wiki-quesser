@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "parse-wikitext": "^1.0.0",
+    "wikiapi": "^1.19.4"
+  }
+}
