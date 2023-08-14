@@ -1,0 +1,11 @@
+header{
+    height: 10vh;
+}
+h1{
+   font-family: monospace ;
+   
+   /* 'Linux Libertine','Georgia','Times','serif' */
+}
+button{
+    max-width: 200px;
+}
