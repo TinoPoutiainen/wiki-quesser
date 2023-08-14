@@ -4,20 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <stylesheet src="/styles/style.css"></stylesheet>
-    <script defer src="/scripts/main.js"></script>
+    <link rel="stylesheet" href="./styles/style.css">
+    <link rel="stylesheet" href="./styles/common.css">
+    <!-- <script defer src="/scripts/main.js"></script> -->
     <script defer src="/scripts/getRandom.js"></script>
 </head>
 
 <body>
     <header></header>
-        <button class="query-button">Get random page</button>
-        <form class="input-form">
-            <input placeholder="Input some text" type="search" class="input" autofocus/>
+    <section class="title-container">
+        <h1>WikiQuesser</h1>
+        <p>Guess the title of a random Wikipedia-article</p>
+    </section>
+    
+    <section class="guess-area">
+        <button class="query-button">Get a random page</button>
+        <form class="guess-form">
+            <input placeholder="Type your answer" class="guess-input" autofocus/>
         </form>
-        <section class="page-container">
-
-        </section>
+        <div class="page-container"></div>
+    </section>
     <footer></footer>
-</body>
+</body> 
 </html>

@@ -1,7 +1,13 @@
 
 
 const button = document.querySelector(".query-button");
+const form = document.querySelector('.guess-form');
+const pageContainer = document.querySelector(".page-container");
+
+
 button.addEventListener('click', getRandom);
+form.addEventListener('submit', (event) => {processAnswer(event, globalTitle);});
+var globalTitle;
 
 async function getRandom(event){
     event.preventDefault();
@@ -29,50 +35,90 @@ async function searchWikipedia(){
     }
     const json = await response.json();
     const title = json.query.random[0].title;
-    const id = json.query.random[0].id;
+    globalTitle = title;
+
   
     //use the title of the random page to get a parsed version of the page
-   
     const url = `http://en.wikipedia.org/w/api.php?format=json&origin=*&action=query&prop=extracts&exlimit=max&explaintext&exintro&titles=${title}`;
     const req = await fetch(url);
-    const randomJson = await req.json();
+    if (!req.ok) {
+        throw Error(response.statusText);
+    }
 
+    const randomJson = await req.json();
     const extract = Object.values(randomJson.query.pages)[0].extract
-  
     console.log(extract);
  
     return [extract, json];
     }
 
+
+
 function displayResult(randomPage, content){
+        const props = randomPage.query.random[0];   
+        const url = `https://en.wikipedia.org/?curid=${props.id}`;
+        const titleParts = props.title.split(" ")
 
-    const pageContainer = document.querySelector(".page-container");
-
-    
-
-    randomPage.query.random.forEach(result => {
-        const url = `https://en.wikipedia.org/?curid=${result.id}`;
-        const titleParts = result.title.split(" ")
         var hint = content
 
         for (let i = 0; i < titleParts.length; i++){
             hint = hint.replaceAll(titleParts[i], "[???]".fontcolor("red"));
         }
-        
 
+        form.reset();
+        const oldResult = document.querySelector('.result-item');
+        const resMessage = document.querySelector('.result-message');
+        if (oldResult) {oldResult.remove()};
+        if (resMessage) {resMessage.remove()};
+      
         pageContainer.insertAdjacentHTML(
             'beforeend',
             `<div class="result-item">
-                <h3 class="result-title">
-                <a href="${url}" target="_blank" rel="noopener">${result.title}</a>
-                </h3>
-                <a href="${url}" class="result-link" target="_blank" rel="noopener">${url}</a>
+                    <div class="answer-container">
+                    <h3 class="result-title">
+                    <a href="${url}" target="_blank" rel="noopener">${props.title}</a>
+                    </h3>
+                    <a href="${url}" class="result-link" target="_blank" rel="noopener">${url}</a>
+                    </div>
                 <p class="extract"> ${hint} </p>
+                
             </div>`
-        );   
-    });
+        );
+        button.disabled = true;
+        
+    
 }
 
+
+
+function processAnswer(event, globalTitle){
+   
+    event.preventDefault();
+    console.log(globalTitle);
+    const inputValue = document.querySelector('.guess-input').value;
+    if (!globalTitle) {
+        console.log("get a random article first")
+    }
+    else if (inputValue == globalTitle){
+        pageContainer.insertAdjacentHTML(
+            'beforebegin',
+            '<p class=result-message >Corrent!</p>'
+        )
+        document.querySelector('.answer-container').style.display = "block";
+        button.disabled = false;
+      
+    }
+    else{
+        pageContainer.insertAdjacentHTML(
+            'beforebegin',
+            '<p class=result-message >Wrong</p>'
+        ) 
+        document.querySelector('.answer-container').style.display = "block";
+        button.disabled = false;
+        
+    }
+
+}
 
 
  // function createUrl(title) { 
@@ -88,3 +134,5 @@ function displayResult(randomPage, content){
     // const url = createUrl(title)
      // const parsed = randomJson.parse.text["*"];
     //return results from action: parse and action: query
+
+    
