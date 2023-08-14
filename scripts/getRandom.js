@@ -37,7 +37,6 @@ async function searchWikipedia(){
     const req = await fetch(url);
     const randomJson = await req.json();
 
-
     const extract = Object.values(randomJson.query.pages)[0].extract
   
     console.log(extract);
@@ -48,8 +47,18 @@ async function searchWikipedia(){
 function displayResult(randomPage, content){
 
     const pageContainer = document.querySelector(".page-container");
+
+    
+
     randomPage.query.random.forEach(result => {
         const url = `https://en.wikipedia.org/?curid=${result.id}`;
+        const titleParts = result.title.split(" ")
+        var hint = content
+
+        for (let i = 0; i < titleParts.length; i++){
+            hint = hint.replaceAll(titleParts[i], "[???]".fontcolor("red"));
+        }
+        
 
         pageContainer.insertAdjacentHTML(
             'beforeend',
@@ -58,7 +67,7 @@ function displayResult(randomPage, content){
                 <a href="${url}" target="_blank" rel="noopener">${result.title}</a>
                 </h3>
                 <a href="${url}" class="result-link" target="_blank" rel="noopener">${url}</a>
-                <p class="extract"> ${content} </p>
+                <p class="extract"> ${hint} </p>
             </div>`
         );   
     });
