@@ -81,7 +81,6 @@ function displayResult(randomPage, content){
                     <a href="${url}" class="result-link" target="_blank" rel="noopener">${url}</a>
                     </div>
                 <p class="extract"> ${hint} </p>
-                
             </div>`
         );
         button.disabled = true;
@@ -100,26 +99,23 @@ function processAnswer(event, globalTitle){
         console.log("get a random article first")
     }
     else if (inputValue == globalTitle){
-        pageContainer.insertAdjacentHTML(
-            'beforebegin',
-            '<p class=result-message >Corrent!</p>'
-        )
-        document.querySelector('.answer-container').style.display = "block";
-        button.disabled = false;
-      
+        updateResultMessage("Correct"); 
     }
     else{
-        pageContainer.insertAdjacentHTML(
-            'beforebegin',
-            '<p class=result-message >Wrong</p>'
-        ) 
-        document.querySelector('.answer-container').style.display = "block";
-        button.disabled = false;
-        
+        updateResultMessage("Wrong");  
     }
 
 }
-
+function updateResultMessage(resMessage) {
+    const oldMessage = document.querySelector('.result-message');
+        if (oldMessage) {oldMessage.remove()};
+        pageContainer.insertAdjacentHTML(
+            'beforebegin',
+            `<p class="result-message" >${resMessage}</p>`
+        ) 
+        document.querySelector('.answer-container').style.display = "block";
+        button.disabled = false;
+}
 
  // function createUrl(title) { 
     //     return "https://en.wikipedia.org/w/api.php?" +
@@ -135,4 +131,3 @@ function processAnswer(event, globalTitle){
      // const parsed = randomJson.parse.text["*"];
     //return results from action: parse and action: query
 
-    
